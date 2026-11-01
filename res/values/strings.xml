@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_desc">Muse Voice Mode Shortcut switch: after you tap the Muse Voice Mode Shortcut icon, taps Muse\'s own voice button to start a voice session, or its end-call button to end one — the icon toggles on/off. Only inspects the Muse window, and only right after a tap.</string>
+    <string name="shortcut_short_label">Muse Voice Mode Shortcut</string>
+    <string name="shortcut_long_label">Muse Voice Mode Shortcut</string>
+</resources>
