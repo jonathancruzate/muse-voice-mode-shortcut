@@ -1,4 +1,4 @@
-# Muse Voice Mode Shortcut (v1.4.0, built 2026-11-01)
+# Muse Voice Mode Shortcut (v1.5.0, built 2026-11-01)
 
 A one-icon **switch** for Muse voice mode on Jonathan's phone,
 built at his direct ask ("Create a Muse Voice Mode Shortcut apk
@@ -6,10 +6,13 @@ using the same accessibility trick as Muse for Android Auto"),
 then tweaked the same night at his order: **each triggering is a
 switch — on, off, on, off.**
 
-- Package `com.jonathancruzate.musevoice`, framework-only (no
-  AndroidX), min SDK 29 / target 35.
-- APK: `Muse-Voice-Mode-Shortcut-1.4.0.apk`, 124,300 B,
-  SHA-256 `c10bef18bfeed10ac43d72c631a02caef9236a70b887e7dd19ff206bbc6d499b`.
+- Package `com.jonathancruzate.musevoicemodeshortcut`,
+  framework-only (no AndroidX), min SDK 29 / target 35.
+  (Renamed in v1.5.0 from `com.jonathancruzate.musevoice` — see
+  the v1.5.0 section below. v1.5.0 is a reinstall, not an
+  in-place upgrade.)
+- APK: `Muse-Voice-Mode-Shortcut-1.5.0.apk`, 124,300 B,
+  SHA-256 `0f594698f0c08fe7d17d87f98a6ad6ef3e374b199e98cb68c8e55547a1e8623a`.
 - Signing cert (own keystore in `keystore/`, password file
   alongside, 0600): SHA-256
   `b07b56806223d7461ad9149522ee9562ee91b689ae1d43750e08bd1f868a4b62`.
@@ -24,9 +27,11 @@ switch — on, off, on, off.**
   shipped as v1.3.0). App label, accessibility service label,
   setup screen, and both shortcut labels all read Muse Voice
   Mode Shortcut. Project directory is the name slug,
-  `~/workspace/muse-voice-mode-shortcut/`. Package and signing
-  cert are unchanged across all versions, so v1.3.0 upgrades in
-  place. The cert DN still reads `CN=Muse Voice` — it is the
+  `~/workspace/muse-voice-mode-shortcut/`. The signing cert is
+  unchanged across all versions, and the package was unchanged
+  through v1.4.0, so v1.0.0–v1.4.0 all upgraded in place;
+  v1.5.0 renamed the package (below), so it installs fresh.
+  The cert DN still reads `CN=Muse Voice` — it is the
   pre-rename keystore's internal name, kept deliberately:
   changing it would break in-place upgrades.
 
@@ -122,7 +127,12 @@ fresh. The switch self-heals every other tap.
 
 ## One-time setup (Jonathan's hands)
 
-1. Install `Muse-Voice-Mode-Shortcut-1.4.0.apk`.
+1. Install `Muse-Voice-Mode-Shortcut-1.5.0.apk`. (v1.5.0 has a
+   new package name, so it installs as a *separate* app next to
+   the old one — both show the same label. Uninstall the old
+   **Muse Voice Mode Shortcut** afterwards; the new one is the
+   one whose accessibility service and side-button mapping you
+   set up below.)
 2. Tap **Muse Voice Mode Shortcut** → setup screen → **Enable accessibility
    service** → Settings → Installed apps → **Muse Voice Mode Shortcut** → ON.
 3. Tap the icon again — voice session should start with a buzz.
@@ -142,16 +152,16 @@ run if absent.
 
 ## Layout
 
-- `src/com/jonathancruzate/musevoice/VoiceState.java` — persisted
+- `src/com/jonathancruzate/musevoicemodeshortcut/VoiceState.java` — persisted
   switch + transient hunt flags
-- `src/com/jonathancruzate/musevoice/VoiceLauncher.java` — the
+- `src/com/jonathancruzate/musevoicemodeshortcut/VoiceLauncher.java` — the
   toggle: `launchVoice` / `endVoice`, `ACTION_ASSIST` + Muse
   foregrounding, buzzes
-- `src/com/jonathancruzate/musevoice/VoiceAccessibilityService.java`
+- `src/com/jonathancruzate/musevoicemodeshortcut/VoiceAccessibilityService.java`
   — both button hunts
-- `src/com/jonathancruzate/musevoice/MainActivity.java` — launcher
+- `src/com/jonathancruzate/musevoicemodeshortcut/MainActivity.java` — launcher
   icon / setup screen / pin-shortcut
-- `src/com/jonathancruzate/musevoice/ShortcutActivity.java` —
+- `src/com/jonathancruzate/musevoicemodeshortcut/ShortcutActivity.java` —
   no-UI shortcut target
 - `res/xml/shortcuts.xml`, `res/xml/voice_accessibility_config.xml`
 - `github-export/` — scrubbed source snapshot for the GitHub
@@ -172,3 +182,57 @@ APK (`Muse-Widget-4.10.0.apk`, xxhdpi md5 `9ecb2bfe…` — aapt2's
 PNG crunch matches on both). Muse for Android Auto got the same
 icon the same night (its v2.3.0). No behavior changes; version
 code 5, same signing cert, upgrades in place.
+
+## v1.5.0 — package renamed to match the project name (2026-11-01)
+
+Jonathan's order the same night: **all APKs and package names
+match their GitHub project names**, reinstalls accepted. This
+app was the outlier — its package predated the naming rule.
+
+- Package: `com.jonathancruzate.musevoice` →
+  **`com.jonathancruzate.musevoicemodeshortcut`** (the repo /
+  project slug `muse-voice-mode-shortcut`, dots removed, under
+  the same `com.jonathancruzate` prefix as Muse for Android
+  Auto). The APK filename already matched
+  (`Muse-Voice-Mode-Shortcut-<version>.apk`) and is unchanged,
+  as is the display label, **Muse Voice Mode Shortcut**.
+- Renamed everywhere it appears: the manifest `package`
+  attribute, all five Java sources (moved to
+  `src/com/jonathancruzate/musevoicemodeshortcut/`, `package`
+  declarations updated), and the launcher-shortcut intent in
+  `res/xml/shortcuts.xml` (`targetPackage` / `targetClass`).
+  Manifest component names are relative and followed
+  automatically; the accessibility config and strings carry no
+  package references. The keystore is untouched — same file
+  (`keystore/musevoice.keystore`), same alias, same cert
+  (SHA-256 `b07b5680…`) — a keystore's filename is not a package
+  name, and the cert is what Android checks.
+- versionCode 6 / versionName 1.5.0. APK
+  `Muse-Voice-Mode-Shortcut-1.5.0.apk`, 124,300 B, SHA-256
+  `0f594698f0c08fe7d17d87f98a6ad6ef3e374b199e98cb68c8e55547a1e8623a`.
+  Verified: `apksigner` OK (cert unchanged); badging shows the
+  new package, code 6 / 1.5.0, label "Muse Voice Mode
+  Shortcut"; the packaged shortcuts.xml points at the new
+  package.
+
+**Reinstall required — a package name IS the app's identity
+on Android, so this cannot upgrade in place.** Installing
+v1.5.0 puts a second, identical-looking "Muse Voice Mode
+Shortcut" next to the old one. After installing:
+
+1. **Re-enable the accessibility service** for the NEW app:
+   tap the new icon → setup screen → **Enable accessibility
+   service** → Settings → Installed apps → **Muse Voice Mode
+   Shortcut** → ON. (Accessibility grants are per-package; the
+   old app's grant does not carry over. The switch state also
+   starts fresh at OFF.)
+2. **Re-point the side-button long press** at the new app:
+   Settings → Advanced features → Side button → Long press →
+   Open app → **Muse Voice Mode Shortcut** (the new one — do
+   this after step 1 so the press flips the switch instead of
+   opening the setup screen).
+3. Uninstall the old app (same label — it's the one whose
+   accessibility entry you just replaced; if unsure, the old
+   package is `com.jonathancruzate.musevoice` in Settings →
+   Apps). Any pinned home-screen shortcut to the old app dies
+   with it; re-pin from the new app's setup screen if used.
