@@ -8,8 +8,8 @@
         android:shortcutLongLabel="@string/shortcut_long_label">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="com.jonathancruzate.musevoicemodeshortcut"
-            android:targetClass="com.jonathancruzate.musevoicemodeshortcut.ShortcutActivity" />
+            android:targetPackage="com.jonathancruzate.metamusevoicemodeshortcut"
+            android:targetClass="com.jonathancruzate.metamusevoicemodeshortcut.ShortcutActivity" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>

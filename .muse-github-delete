@@ -1,5 +1,5 @@
-src/com/jonathancruzate/musevoice/MainActivity.java
-src/com/jonathancruzate/musevoice/ShortcutActivity.java
-src/com/jonathancruzate/musevoice/VoiceAccessibilityService.java
-src/com/jonathancruzate/musevoice/VoiceLauncher.java
-src/com/jonathancruzate/musevoice/VoiceState.java
+src/com/jonathancruzate/musevoicemodeshortcut/MainActivity.java
+src/com/jonathancruzate/musevoicemodeshortcut/ShortcutActivity.java
+src/com/jonathancruzate/musevoicemodeshortcut/VoiceAccessibilityService.java
+src/com/jonathancruzate/musevoicemodeshortcut/VoiceLauncher.java
+src/com/jonathancruzate/musevoicemodeshortcut/VoiceState.java
