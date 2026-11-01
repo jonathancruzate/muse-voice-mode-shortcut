@@ -58,6 +58,34 @@ Three entry points, all flipping the same switch:
 3. **Pinned home-screen shortcut**: the setup screen's "Add
    home-screen shortcut" button uses
    `ShortcutManager.requestPinShortcut` → same `ShortcutActivity`.
+4. **Galaxy S24+ side button, long press** — the mapping
+   Jonathan actually uses day to day (his setup, recorded
+   2026-11-01; see the next section).
+
+## How Jonathan uses it — side button long press (Galaxy S24+)
+
+The shortcut is mapped to the **long press of the side button**
+on Jonathan's Galaxy S24+, so voice mode is one hardware press
+away, no screen interaction needed:
+
+- **Long press once** → switch ON, Muse voice session starts.
+- **Long press again** → switch OFF, session ends.
+- Works the same from any app; combined with the buzzes (short =
+  start tap landed, double = turning off) it is fully eyes-free.
+
+Setup on the S24+ (One UI): **Settings → Advanced features →
+Side button → Long press → Open app → Muse Voice Mode
+Shortcut**. Notes:
+
+- The accessibility service must be enabled first (one-time
+  setup below), or the press lands on the setup screen instead
+  of flipping the switch.
+- Remapping long press gives up its default (Bixby / power-off
+  menu): power off moves to the Quick settings power icon, or
+  side button + Volume down together.
+- This is an app launch mapping, not the digital-assistant
+  slot — Muse keeps no assistant role, and Gemini's own
+  triggers are untouched.
 
 ## The accessibility trick (from Muse for Android Auto)
 
