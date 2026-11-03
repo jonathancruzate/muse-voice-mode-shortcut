@@ -31,13 +31,36 @@
         </activity>
 
         <!-- Direct shortcut target (long-press shortcut + pinned
-             home-screen shortcuts): no UI, fires the voice launch. -->
+             home-screen shortcuts): no UI, fires the voice launch.
+             v1.7.0: this same activity is also the digital-assistant
+             target. The Galaxy Buds "Touch and hold -> Digital
+             assistant" flow (and the system assist chooser behind it,
+             "Complete action using") resolves activities that handle
+             ACTION_ASSIST / ACTION_VOICE_COMMAND — the same pattern
+             Home Assistant and MacroDroid use to appear in that
+             chooser (HA ships it as a VOICE_COMMAND activity-alias to
+             its AssistActivity; Samsung One UI additionally requires
+             an ACTION_ASSIST filter for an app to be enumerated as a
+             digital assistant at all). Declaring both actions here
+             makes "Muse Voice Mode Shortcut" selectable for the Buds
+             long press: choosing it (Always) makes every Buds
+             touch-and-hold fire this activity, which flips the voice
+             switch exactly like the side button does. The filters sit
+             on the real toggle activity, not a finish()-only
+             trampoline, so an assist launch is a real toggle. -->
         <activity
             android:name=".ShortcutActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST" />
+                <action android:name="android.intent.action.VOICE_COMMAND" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

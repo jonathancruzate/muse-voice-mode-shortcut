@@ -1,4 +1,4 @@
-# Muse Voice Mode Shortcut (v1.6.0, built 2026-11-01)
+# Muse Voice Mode Shortcut (v1.7.0, built 2026-11-03)
 
 A one-icon **switch** for Muse voice mode on Jonathan's phone,
 built at his direct ask ("Create a Muse Voice Mode Shortcut apk
@@ -11,8 +11,8 @@ switch — on, off, on, off.**
   (Renamed in v1.5.x from `com.jonathancruzate.musevoice` — see
   the v1.5.0 → v1.5.1 section below. The rename is a reinstall,
   not an in-place upgrade.)
-- APK: `Muse-Voice-Mode-Shortcut-1.6.0.apk`, 124,300 B,
-  SHA-256 `332e78ece7d6966bf1b2e5924c45d5232ed992d758a003a6e5427e0ad6b08797`.
+- APK: `Muse-Voice-Mode-Shortcut-1.7.0.apk`, 124,300 B,
+  SHA-256 `2974ab84865942c83b34a92bcadc3667eb457d56693036904991ce771e647de5`.
 - Signing cert (own keystore in `keystore/`, password file
   alongside, 0600): SHA-256
   `b07b56806223d7461ad9149522ee9562ee91b689ae1d43750e08bd1f868a4b62`.
@@ -50,7 +50,7 @@ taps. The switch flips at tap time (before Muse opens), so a
 hunt that never finds its button still leaves the next tap in
 the safe direction.
 
-Three entry points, all flipping the same switch:
+Five entry points, all flipping the same switch:
 
 1. **Launcher icon "Muse Voice Mode Shortcut"** (`MainActivity`, translucent):
    with the accessibility service enabled it flips and finishes
@@ -66,6 +66,12 @@ Three entry points, all flipping the same switch:
 4. **Galaxy S24+ side button, long press** — the mapping
    Jonathan actually uses day to day (his setup, recorded
    2026-11-01; see the next section).
+5. **Galaxy Buds touch and hold, "Digital assistant"** (v1.7.0,
+   Jonathan's ask 2026-11-03, from his screenshot of the Buds
+   chooser): `ShortcutActivity` declares `ACTION_ASSIST` +
+   `ACTION_VOICE_COMMAND`, so it appears in the Buds'
+   "Complete action using" chooser alongside Bixby, Google,
+   Home Assistant, and MacroDroid — see the Buds section below.
 
 ## How Jonathan uses it — side button long press (Galaxy S24+)
 
@@ -91,6 +97,70 @@ Shortcut**. Notes:
 - This is an app launch mapping, not the digital-assistant
   slot — Muse keeps no assistant role, and Gemini's own
   triggers are untouched.
+
+## How Jonathan uses it — Galaxy Buds touch and hold (v1.7.0)
+
+Jonathan's ask (2026-11-03, with a screenshot of his Buds
+settings): in **Galaxy Wearable → Touch and hold**, the **Left**
+bud is set to **Digital assistant**, and tapping it opens the
+system chooser **"Complete action using"** — which listed only
+Bixby, Google, Home Assistant, and MacroDroid, because those are
+the apps on his phone that handle the digital-assistant intents.
+This app handled none of them, so it could not be picked.
+
+**The fix (v1.7.0, manifest-only):** `ShortcutActivity` — the
+existing no-UI toggle activity — now declares an intent filter
+for **`android.intent.action.ASSIST`** and
+**`android.intent.action.VOICE_COMMAND`** (category DEFAULT).
+That is the documented pattern behind the other names in his
+screenshot: Home Assistant ships a `VOICE_COMMAND`
+activity-alias to its AssistActivity, and Samsung One UI
+additionally requires an `ACTION_ASSIST` filter before an app is
+enumerated as a digital assistant at all (online check
+2026-11-03: Home Assistant manifest via the Dicio #226 thread;
+the One UI ASSIST requirement via the kernel-ai-assistant #987
+work; Pixel Buds projects use the same ASSIST + VOICE_COMMAND
+pair for earbud long presses). The filters sit on the real
+toggle activity, not a `finish()`-only trampoline. The activity
+also gained `noHistory` + `excludeFromRecents` so assist
+launches never pollute Recents. No code, package, or cert
+changes — v1.7.0 upgrades v1.6.0 **in place**, and the
+accessibility grant and side-button mapping carry over
+untouched.
+
+**Setup on the phone (Jonathan's hands, ~30 seconds):**
+
+1. Install `Muse-Voice-Mode-Shortcut-1.7.0.apk` (in-place
+   upgrade — do NOT uninstall the old one first).
+2. Galaxy Wearable (or Settings → Buds) → **Touch and hold** →
+   **Left** (or Right) → **Digital assistant**.
+3. In **"Complete action using"**, tap **Muse Voice Mode
+   Shortcut** → **Always**. (If Muse isn't in the list, the
+   v1.7.0 upgrade hasn't landed yet — reinstall and reopen the
+   Buds setting.)
+4. Touch and hold that bud: **hold once = voice ON** (short
+   buzz when the tap lands), **hold again = voice OFF** (double
+   buzz) — the exact same switch as the side button, fully
+   eyes-free, phone in pocket.
+
+Notes:
+
+- **"Always" binds the assistant intent system-wide,** not just
+  for the Buds: anything else that fires a bare ASSIST /
+  VOICE_COMMAND intent and previously opened his chosen
+  assistant will now flip Muse voice instead. That is the
+  point of the mapping, but it is a real trade — to undo it:
+  Settings → Apps → Muse Voice Mode Shortcut → **Set as
+  default → Clear defaults**, then re-pick in the Buds flow.
+- The other bud keeps its own mapping (his Right bud stays on
+  **Switch noise controls**), so ANC toggling is untouched.
+- If a session is already running, a Buds hold ends it (the
+  switch is shared with every entry point — the persisted state
+  is one switch, not one per surface).
+- On-device verification is Jonathan's first hold: the chooser
+  listing is verifiable from the packaged manifest (done at
+  build time — see the v1.7.0 section), but only a real Buds
+  hold proves Samsung's Wearable app routes it as expected.
 
 ## The accessibility trick (from Muse for Android Auto)
 
@@ -127,10 +197,14 @@ fresh. The switch self-heals every other tap.
 
 ## One-time setup (Jonathan's hands)
 
-1. Install `Muse-Voice-Mode-Shortcut-1.6.0.apk`. (The package
-   changed in the v1.5.1/v1.6.0 rename, so coming from v1.5.0 or
-   older it installs as a *separate* app next to the old one —
-   both show the same label. Uninstall the old
+1. Install the current APK (`Muse-Voice-Mode-Shortcut-1.7.0.apk`).
+   Coming from v1.6.0 (or v1.5.1) it upgrades **in place** — same
+   package, same cert, accessibility grant and side-button
+   mapping preserved; skip straight to the Buds setup in the
+   Buds section above if you only want the new mapping. (The
+   package changed in the v1.5.1/v1.6.0 rename, so coming from
+   v1.5.0 or older it installs as a *separate* app next to the
+   old one — both show the same label. Uninstall the old
    **Muse Voice Mode Shortcut** afterwards; the new one is the
    one whose accessibility service and side-button mapping you
    set up below.)
@@ -271,3 +345,43 @@ of this same rename, so 1.6.0 could not reuse it).
   **re-enable its accessibility service**, **re-point the
   side-button long press** at the new app, then uninstall the
   old one (full steps in "One-time setup" above).
+
+## v1.7.0 — Galaxy Buds digital-assistant mapping (2026-11-03)
+
+Jonathan's ask, with his screenshot of the Buds "Touch and
+hold" screen: the Left bud is set to **Digital assistant**, the
+system's "Complete action using" chooser lists Bixby, Google,
+Home Assistant, and MacroDroid — and Muse Voice Mode Shortcut
+wasn't in it, because the app handled no assistant intent.
+
+- **Change (manifest-only):** `ShortcutActivity` gains a second
+  intent filter — `android.intent.action.ASSIST` +
+  `android.intent.action.VOICE_COMMAND`, category DEFAULT — plus
+  `noHistory` and `excludeFromRecents`. Pattern checked online
+  the same day (his standing rule): Home Assistant's
+  VOICE_COMMAND activity-alias to its AssistActivity (via the
+  Dicio #226 thread), Samsung One UI's additional requirement of
+  an ACTION_ASSIST filter for digital-assistant enumeration
+  (kernel-ai-assistant #987), and earbud long-press projects
+  using the same ASSIST + VOICE_COMMAND pair. No Java behavior
+  changes (a doc comment on `ShortcutActivity` aside), no
+  VoiceInteractionService: the Buds chooser is an activity
+  chooser, and a VIS would additionally hijack the system
+  default-assistant role, which this mapping does not need.
+- versionCode **9** / versionName **1.7.0**. APK
+  `Muse-Voice-Mode-Shortcut-1.7.0.apk`, 124,300 B, SHA-256
+  `2974ab84865942c83b34a92bcadc3667eb457d56693036904991ce771e647de5`.
+  Verified from the built APK: `apksigner` OK, cert unchanged
+  (SHA-256 `b07b56806223d7461ad9149522ee9562ee91b689ae1d43750e08bd1f868a4b62`);
+  badging shows the same package, code 9 / 1.7.0, label
+  "Muse Voice Mode Shortcut"; `aapt2 dump xmltree` on the
+  packaged manifest shows `.ShortcutActivity` carrying both
+  `ASSIST` and `VOICE_COMMAND` actions with
+  `excludeFromRecents=true` / `noHistory=true`.
+- **Install:** over v1.6.0 / v1.5.1 it upgrades **in place**
+  (same package + cert) — accessibility grant, switch state,
+  and the side-button mapping all carry over. Then map it in
+  the Buds flow (full steps in the Buds section above). The one
+  remaining verification is on-device: Muse appearing in the
+  "Complete action using" list and a real Buds hold flipping
+  the switch are Jonathan's first-hold test.
