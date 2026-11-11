@@ -8,6 +8,34 @@ directory is the name slug). The README in that repo is the full
 record — this skill is the operating summary; where they disagree,
 the README and the packaged manifest win.
 
+**Relationship to Muse Device Assistance (2026-11-08):** the
+accessibility mechanism this app pioneered is now also folded into
+the Muse Device Assistance app as its `voice_mode` module, which
+is LIVE (Jonathan enabled it 2026-11-08; full toggle pair verified)
+and is the route Muse itself uses to self-activate a voice session
+from chat — under the discretion grant and the SPEAK-FIRST rule in
+the `local-muse-device-assistance` skill (a self-activated session
+is a call Muse placed: speak first, immediately; never leave one
+open and silent). This standalone app remains Jonathan's own manual
+switch (side button / Buds hold / shortcuts) and is unchanged by
+that; the two share the mechanism, not the state.
+
+**SUPERSEDED as Muse's voice-mode mechanism (Jonathan's standing
+order, live voice call 2026-11-11 ~02:47 EST):** Device Assistance
+`voice_mode` is now THE voice path — the single mechanism by which
+Muse talks to Jonathan by voice, at Muse's own discretion
+(canonical: the `local-muse-device-assistance` skill). The legacy
+voice-mode toggle/shortcut lane this app pioneered is superseded
+as Muse's mechanism; the replacement was verified live repeatedly
+before this retirement (full toggle pair 2026-11-08; multiple
+sessions 2026-11-11, including the call the order was given on).
+This app remains installed as **Jonathan's own manual switch**
+(side-button long press / Buds hold / shortcuts) — that is its only
+remaining role. The build/install/trigger procedures below are
+retained as the app's maintenance record; they are not
+instructions for Muse to reach Jonathan — for that, use Device
+Assistance `voice_mode`.
+
 This skill ships with the app (Jonathan's standing rule, 2026-11-03:
 every APK we build carries a skill teaching Muse how to interact
 with and use it). The in-repo copy is
