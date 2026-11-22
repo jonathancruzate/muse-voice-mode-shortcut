@@ -385,3 +385,14 @@ wasn't in it, because the app handled no assistant intent.
   remaining verification is on-device: Muse appearing in the
   "Complete action using" list and a real Buds hold flipping
   the switch are Jonathan's first-hold test.
+
+## v1.8.1 (2026-11-21) — unique Muse app icon
+
+Icon-only release (versionCode 11). Launcher icon is now this app's own
+from the approved unique Muse app icon set (`~/workspace/muse-app-logos/`):
+original Muse blue M on a light tile plus a pink microphone badge,
+superseding the 2026-11-01 all-same-icon rule. Legacy mipmaps + round +
+adaptive icon (background #F0F2F5, foreground at 76% centred). Verified:
+icon extracted from the built APK matches the approved art; apksigner
+verify passed. APK: Muse-Voice-Mode-Shortcut-1.8.1.apk, SHA-256 `2d7e3b9872c3896050c0ff3e7ddb14b7ad0e9dc2ecd18a3605048744b204ee68`.
+Not installed by this handling; ready to install.
